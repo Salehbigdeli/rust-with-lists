@@ -1,14 +1,24 @@
 #[derive(Debug)]
-pub enum List {
-    Empty,
-    Elem(i32, Box<List>),
+struct Node {
+    elem: i32,
+    next: Link
 }
 
-impl List {
-    pub fn new() -> List {
-        List::Empty
-    }
+#[derive(Debug)]
+enum Link {
+    Empty,
+    More(Box<Node>),
 }
+
+pub struct List {
+    head: Link,
+}
+
+// impl List {
+//     pub fn new() -> List {
+//         List::Empty
+//     }
+// }
 
 // impl List {
 //     pub fn add(&mut self, item: i32) -> List{
