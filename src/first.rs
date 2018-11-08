@@ -24,35 +24,54 @@ impl List {
 }
 
 impl List {
-    fn push(&mut self, item: i32) {
+    pub fn push(&mut self, elem: i32) {
         let new_node = Box::new(Node {
-            elem: item,
-            next: mem::replace(&mut self.head, Link::Empty)
+            elem: elem,
+            next: mem::replace(&mut self.head, Link::Empty),
         });
+
+        self.head = Link::More(new_node);
     }
+
+
+
+
 }
 
 
 impl List {
-    fn pop(&mut self) -> Option<i32> {
+    pub fn pop(&mut self) -> Option<i32> {
         match mem::replace(&mut self.head, Link::Empty) {
-        Link::Empty => None,
-        Link::More(boxed_node) => {
-            let node = *boxed_node;
-            self.head = node.next;
-            Some(node.elem)
+            Link::Empty => None,
+            Link::More(boxed_node) => {
+                let node = *boxed_node;
+                self.head = node.next;
+                Some(node.elem)
             }
         }
     }
 }
 
-// impl List {
-//     pub fn add(&mut self, item: i32) -> List{
-//         match self {
-//             List::Empty => {
-//                 self = &mut List::Elem(item, Box::new(List::Empty))
-//             },
-//             List::Elem(_i, _next) => List::Empty,
-//         }
-//     }
-// }
+#[cfg(test)]
+mod test {
+    use super::List;
+    #[test]
+    fn basics() {
+        let mut l = List::new();
+        assert_eq!(l.pop(), None);
+
+        l.push(1);
+        l.push(2);
+        l.push(3);
+
+        assert_eq!(l.pop(), Some(3));
+        assert_eq!(l.pop(), Some(2));
+
+        l.push(4);
+        l.push(5);
+
+        assert_eq!(l.pop(), Some(5));
+        assert_eq!(l.pop(), Some(4));
+        assert_eq!(l.pop(), Some(1));
+    }
+}
